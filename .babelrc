@@ -1,0 +1,10 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "include": ["transform-block-scoping"]
+      }
+    ]
+  ]
+}

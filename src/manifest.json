@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "${plugin.name}",
+  "description": "chrome tools",
+  "version": "1.0.0",
+  "action": {
+    "default_popup": "pages/popup.html",
+    "default_title": "${plugin.title}"
+  },
+  "permissions": [
+    "tabs",
+    "contextMenus",
+    "storage",
+    "unlimitedStorage"
+  ],
+  "content_scripts": [{
+    "matches": [
+      "http://*/*",
+      "https://*/*"
+    ],
+    "all_frames": true,
+    "js": ["${content.js}"]
+  }],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'",
+    "sandbox": "sandbox allow-scripts; script-src 'self'"
+  },
+  "web_accessible_resources": [{
+    "resources": ["${inject.js}", "fonts/element-icons.woff", "fonts/element-icons.ttf"],
+    "matches": ["http://*/*", "https://*/*"]
+  }],
+  "options_page": "pages/options.html",
+  "background": {
+    "service_worker": "${background.js}"
+  }
+}
