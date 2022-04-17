@@ -6,7 +6,8 @@
   "scripts": {
     "serve": "node server",
     "dev": "rm -rf dist && webpack --env prod && node server",
-    "build": "rm -rf dist && webpack --env prod"
+    "build": "rm -rf dist && webpack --env prod",
+    "zip": "cd dist && zip -r ../chrome-tools.zip *"
   },
   "repository": {
     "type": "git",

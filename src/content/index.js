@@ -1,6 +1,17 @@
 import { INJECT_URL, ACTION_SQL_DECODER } from '../constants';
 
 const extensionId = chrome.runtime.id
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+  sendResponse({ success: true });
+  console.log('chrome.runtime.onMessage =>', msg, sender);
+  switch (msg.action) {
+    case ACTION_SQL_DECODER:
+      decodeSql(msg.data);
+      break;
+  }
+});
+console.log('content loaded');
+
 var app = document.getElementById(extensionId);
 if (app) {
   const script = document.createElement('script');
@@ -43,19 +54,21 @@ function decodeSql (text) {
     div = document.createElement('div');
     div.id = id;
     div.style.background = '#ffffff';
-    // div.style.minWidth = '30%';
-    // div.style.minHeight = '30%';
+    div.style.maxHeight = '80%';
+    div.style.maxWidth = '80%';
     div.style.position = 'fixed';
     div.style.top = '1px';
     div.style.right = '1px';
-    div.style.zIndex = 999;
+    div.style.zIndex = 99999;
     div.style.padding = '2px 12px 2px 2px';
     div.style.border = '1px solid red';
+    div.style.fontSize = '16px';
     let x = document.createElement('a');
     x.innerText = 'X';
     x.style.position = 'absolute';
     x.style.top = '1px';
     x.style.right = '1px';
+    x.style.color = 'black';
     x.style.cursor = 'pointer';
     x.onclick = function () {
       div.style.display = 'none';
@@ -64,7 +77,10 @@ function decodeSql (text) {
     let txt = document.createElement('textarea');
     txt.style.width = '100%';
     txt.style.height = '100%';
+    txt.style.maxWidth = '100%';
+    txt.style.maxHeight = '100%';
     txt.style.outline = 'none';
+    txt.style.resize = 'both';
     txt.style.boxSizing = 'border-box';
     txt.rows = 10;
     txt.cols = 50;
@@ -79,14 +95,3 @@ function decodeSql (text) {
   div.style.display = 'block';
   div.querySelector('textarea').value = res;
 }
-
-console.log('content loaded');
-chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-  console.log('chrome.runtime.onMessage=====>', msg, sender);
-  switch (msg.action) {
-    case ACTION_SQL_DECODER:
-      decodeSql(msg.data);
-      break;
-  }
-  sendResponse({ success: true });
-})

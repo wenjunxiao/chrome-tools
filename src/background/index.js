@@ -2,7 +2,7 @@ import { ACTION_SQL_DECODER } from '../constants';
 
 console.log('background loaded');
 chrome.runtime.onInstalled.addListener((details) => {
-  console.log('chrome.runtime.onInstalled', details);
+  console.log('chrome.runtime.onInstalled => ', details);
   if (details.reason === chrome.runtime.OnInstalledReason.INSTALL ||
     details.reason === chrome.runtime.OnInstalledReason.UPDATE) {
     chrome.tabs.create({
@@ -14,17 +14,19 @@ chrome.runtime.onInstalled.addListener((details) => {
     "title": "SQL解码",
     "contexts": ["selection"]
   });
+});
+
+chrome.contextMenus.onClicked.addListener(function (info, tab) {
   try {
-    chrome.contextMenus.onClicked.addListener(function (info, tab) {
-      try {
-        chrome.tabs.sendMessage(tab.id, {
-          action: info.menuItemId,
-          data: info.selectionText
-        }, function (response) {
-          console.log('contextMenus.response>', response);
-        });
-      } catch (err) {
-        console.error(err);
+    console.log('chrome.contextMenus.onClicked =>', tab.id);
+    chrome.tabs.sendMessage(tab.id, {
+      action: info.menuItemId,
+      data: info.selectionText
+    }, function (response) {
+      if (!chrome.runtime.lastError) {
+        console.log('contextMenus.response =>', response);
+      } else {
+        console.log('contextMenus.response =>', chrome.runtime.lastError);
       }
     });
   } catch (err) {
@@ -42,3 +44,4 @@ chrome.action.onClicked.addListener((tab) => {
     url: 'pages/options.html'
   });
 });
+
