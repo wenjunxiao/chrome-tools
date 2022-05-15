@@ -8,10 +8,15 @@
     "default_title": "${plugin.title}"
   },
   "permissions": [
+    "cookies",
     "tabs",
     "contextMenus",
     "storage",
     "unlimitedStorage"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
   ],
   "content_scripts": [{
     "matches": [
